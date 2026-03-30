@@ -214,10 +214,12 @@
     padding: 16px 22px; display: flex; align-items: center; gap: 12px;
   }
   .card-header .icon {
-    width: 34px; height: 34px; border-radius: 8px;
-    background: rgba(255,255,255,0.18);
+    width: 40px; height: 40px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 17px; flex-shrink: 0;
+    flex-shrink: 0;
+  }
+  .card-header .icon img {
+    width: 40px; height: 40px; object-fit: contain;
   }
   .card-header h2 { font-size: 15px; font-weight: 800; letter-spacing: 0.1px; }
   .card-header p  { font-size: 11.5px; opacity: 0.75; margin-top: 2px; font-weight: 400; }
@@ -301,14 +303,29 @@
   .roi-banner-label span { font-size: 11px; font-weight: 400; opacity: 0.85; display: block; margin-top: 2px; }
   .roi-banner-val { font-size: 34px; font-weight: 900; color: white; white-space: nowrap; }
 
-  .byline {
-    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.11);
-    border-radius: 9px; padding: 13px 16px; margin-top: 14px;
-    font-size: 12.5px; color: rgba(255,255,255,0.78); line-height: 1.65;
-  }
-  .byline strong { color: var(--ts-yellow); }
+.divider { height: 1px; background: rgba(255,255,255,0.09); margin: 16px 0; }
 
-  .divider { height: 1px; background: rgba(255,255,255,0.09); margin: 16px 0; }
+  /* ════════════════════════════════
+     ROI SUMMARY BANNER
+  ════════════════════════════════ */
+  .roi-summary-bar {
+    background: var(--ts-blue-dark);
+    padding: 28px 24px;
+  }
+  .roi-summary-inner {
+    max-width: 1100px; margin: 0 auto;
+    text-align: center;
+  }
+  .roi-summary-text {
+    font-size: clamp(17px, 2.4vw, 22px);
+    font-weight: 500;
+    color: rgba(255,255,255,0.88);
+    line-height: 1.6;
+  }
+  .roi-summary-text strong {
+    color: var(--ts-yellow);
+    font-weight: 800;
+  }
 
   /* ════════════════════════════════
      METHODOLOGY
@@ -397,14 +414,18 @@
   </div>
 </section>
 
+<!-- ════ ROI SUMMARY BANNER ════ -->
+<div class="roi-summary-bar">
+  <div class="roi-summary-inner">
+    <p class="roi-summary-text">
+      By retaining <strong id="bl-retained">12</strong> additional teachers, your program could serve <strong id="bl-children">90</strong> more children across <strong id="bl-rooms">6</strong> classrooms — generating up to <strong id="bl-rev">$1,068,000</strong> in net additional tuition revenue while saving <strong id="bl-savings">$96,000</strong> in rehiring costs.
+    </p>
+  </div>
+</div>
+
 <!-- ════ CALCULATOR ════ -->
 <div class="calculator-wrap">
   <div class="container">
-
-    <div class="nieer-badge">
-      <div class="dot"></div>
-      <span>Research by <strong>NIEER at Rutgers University</strong> — Independent randomized controlled trial</span>
-    </div>
 
     <div class="calc-grid">
 
@@ -413,7 +434,7 @@
 
         <div class="card" style="margin-bottom:20px">
           <div class="card-header">
-            <div class="icon">🏫</div>
+            <div class="icon"><img src="icons/TS_100x100_Wole-child Curriculum.png" alt="" /></div>
             <div><h2>Program Information</h2><p>Tell us about your program's size and structure</p></div>
           </div>
           <div class="card-body">
@@ -434,25 +455,25 @@
 
         <div class="card" style="margin-bottom:20px">
           <div class="card-header">
-            <div class="icon">📊</div>
-            <div><h2>Current Retention Rate</h2><p>Your starting point — or use the industry average</p></div>
+            <div class="icon"><img src="icons/TS_100x100_Teacher Turnover.png" alt="" /></div>
+            <div><h2>Current Teacher Attrition</h2><p>How many teachers are you losing each year?</p></div>
           </div>
           <div class="card-body">
             <div class="field">
-              <label>Your Current Annual Teacher Retention Rate</label>
-              <div class="range-val" id="retentionDisplay">55 <span>%</span></div>
+              <label>Your Current Annual Teacher Attrition Rate</label>
+              <div class="range-val" id="attritionDisplay">45 <span>%</span></div>
               <div class="range-wrap">
-                <input type="range" id="retentionRate" min="20" max="95" value="55" step="1" />
-                <div class="range-labels"><span>20%</span><span>Industry avg ~55%</span><span>95%</span></div>
+                <input type="range" id="attritionRate" min="5" max="80" value="45" step="1" />
+                <div class="range-labels"><span>5%</span><span>Industry avg ~45%</span><span>80%</span></div>
               </div>
             </div>
             <div class="field" style="margin-top:16px">
-              <label>Projected Rate with Teaching Strategies
-                <span class="hint">Applies the NIEER-documented 54% relative increase to your current rate</span>
+              <label>Projected Attrition with Teaching Strategies
+                <span class="hint">Applies the NIEER-documented 54% retention increase, reducing your attrition rate</span>
               </label>
               <div class="proj-chip">
-                <span class="proj-chip-label">Projected retention</span>
-                <span class="proj-chip-val" id="projectedRetention">84.7%</span>
+                <span class="proj-chip-label">Projected attrition</span>
+                <span class="proj-chip-val" id="projectedAttrition">15.3%</span>
               </div>
             </div>
           </div>
@@ -460,7 +481,7 @@
 
         <div class="card">
           <div class="card-header">
-            <div class="icon">💰</div>
+            <div class="icon"><img src="icons/TS_100x100_Improve outcomes.png" alt="" /></div>
             <div><h2>Cost Assumptions</h2><p>Adjust based on your market — defaults are research-backed</p></div>
           </div>
           <div class="card-body">
@@ -524,7 +545,15 @@
               <div class="roi-banner-val" id="res-netROI">$56,840</div>
             </div>
 
-            <div class="divider"></div>
+          </div>
+        </div>
+
+        <div class="results-card" style="margin-top: 16px;">
+          <div class="results-header">
+            <div class="eyebrow">Growth Opportunity</div>
+            <h3>How Improving Retention Could Help You Grow</h3>
+          </div>
+          <div class="results-body">
 
             <div class="result-item">
               <div class="result-label"><strong>Additional Classrooms Fully Staffed</strong>from teachers no longer lost to turnover</div>
@@ -539,10 +568,6 @@
             <div class="result-item">
               <div class="result-label"><strong>Potential Additional Revenue</strong>new children × annual tuition (net of investment)</div>
               <div class="result-value big" id="res-revGain">$1,068,000</div>
-            </div>
-
-            <div class="byline">
-              By retaining <strong id="bl-retained">12</strong> additional teachers, your program could serve <strong id="bl-children">90</strong> more children across <strong id="bl-rooms">6</strong> classrooms — generating up to <strong id="bl-rev">$1,068,000</strong> in net additional tuition revenue while saving <strong id="bl-savings">$96,000</strong> in rehiring costs.
             </div>
 
           </div>
@@ -591,12 +616,14 @@
     const classrooms       = Math.max(1, parseInt($('classrooms').value)      || 1);
     const childrenPerRoom  = Math.max(1, parseInt($('childrenPerRoom').value)  || 1);
     const teachersPerRoom  = Math.max(1, parseInt($('teachersPerRoom').value)  || 2);
-    const currentRetention = parseInt($('retentionRate').value) / 100;
+    const currentAttrition = parseInt($('attritionRate').value) / 100;
+    const currentRetention = 1 - currentAttrition;
     const replacementCost  = Math.max(0, parseFloat($('replacementCost').value) || 0);
     const tuition          = parseInt($('tuitionRate').value) || 12000;
 
     const projectedRetention = Math.min(0.99, currentRetention * 1.54);
-    $('projectedRetention').textContent = (projectedRetention * 100).toFixed(1) + '%';
+    const projectedAttrition = 1 - projectedRetention;
+    $('projectedAttrition').textContent = (projectedAttrition * 100).toFixed(1) + '%';
 
     const totalTeachers    = classrooms * teachersPerRoom;
     const teachersLostNow  = Math.round(totalTeachers * (1 - currentRetention));
@@ -632,8 +659,8 @@
   ['classrooms','childrenPerRoom','teachersPerRoom','replacementCost'].forEach(id =>
     $(id).addEventListener('input', compute)
   );
-  $('retentionRate').addEventListener('input', function() {
-    $('retentionDisplay').innerHTML = this.value + ' <span>%</span>';
+  $('attritionRate').addEventListener('input', function() {
+    $('attritionDisplay').innerHTML = this.value + ' <span>%</span>';
     setSliderBg(this); compute();
   });
   $('tuitionRate').addEventListener('input', function() {
@@ -641,7 +668,7 @@
     setSliderBg(this); compute();
   });
 
-  setSliderBg($('retentionRate'));
+  setSliderBg($('attritionRate'));
   setSliderBg($('tuitionRate'));
   compute();
 </script>
