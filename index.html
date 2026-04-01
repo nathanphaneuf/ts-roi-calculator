@@ -197,7 +197,7 @@
   .nieer-badge strong { color: var(--ts-blue-dark); }
 
   .calc-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
+    display: grid; grid-template-columns: 2fr 3fr;
     gap: 24px; align-items: start;
   }
   @media (max-width: 740px) { .calc-grid { grid-template-columns: 1fr; } }
@@ -444,7 +444,7 @@
             </div>
             <div class="field">
               <label>Children Per Classroom<span class="hint">Average enrollment per classroom</span></label>
-              <input type="number" id="childrenPerRoom" value="15" min="1" max="30" />
+              <input type="number" id="childrenPerRoom" value="8" min="1" max="30" />
             </div>
             <div class="field">
               <label>Teachers Per Classroom<span class="hint">Typically 2 for licensed child care</span></label>
@@ -468,12 +468,12 @@
               </div>
             </div>
             <div class="field" style="margin-top:16px">
-              <label>Projected Attrition with Teaching Strategies
-                <span class="hint">Applies the NIEER-documented 54% retention increase, reducing your attrition rate</span>
+              <label>Projected Retention with Teaching Strategies
+                <span class="hint">Applies the NIEER-documented 54% retention increase, raising your retention rate</span>
               </label>
               <div class="proj-chip">
-                <span class="proj-chip-label">Projected attrition</span>
-                <span class="proj-chip-val" id="projectedAttrition">15.3%</span>
+                <span class="proj-chip-label">Projected retention</span>
+                <span class="proj-chip-val" id="projectedAttrition">84.7%</span>
               </div>
             </div>
           </div>
@@ -573,21 +573,22 @@
           </div>
         </div>
 
-        <div class="method-section">
-          <h4>📐 Calculation Methodology</h4>
-          <div class="method-grid">
-            <div class="method-item"><div class="m-label">Retention uplift source</div><div class="m-val">NIEER RCT +54%</div></div>
-            <div class="method-item"><div class="m-label">Replacement cost basis</div><div class="m-val">~24% of avg ECE salary</div></div>
-            <div class="method-item"><div class="m-label">Study scope</div><div class="m-val">180 classrooms, 3 yrs</div></div>
-            <div class="method-item"><div class="m-label">Revenue model</div><div class="m-val">Net of TS investment</div></div>
-          </div>
-          <p style="font-size:11.5px;color:var(--ts-slate);margin-top:13px;line-height:1.65;">
-            Projected retention applies the NIEER-documented 54% relative increase to your current rate. Default replacement cost of $8,000 is based on BLS median ECE wage (~$33,000) and SHRM estimates of 20–30% of annual salary for frontline service roles. All figures are projections for planning purposes only.
-          </p>
-        </div>
-
       </div><!-- /RIGHT -->
     </div>
+
+    <div class="method-section">
+      <h4>📐 Calculation Methodology</h4>
+      <div class="method-grid">
+        <div class="method-item"><div class="m-label">Retention uplift source</div><div class="m-val">NIEER RCT +54%</div></div>
+        <div class="method-item"><div class="m-label">Replacement cost basis</div><div class="m-val">~24% of avg ECE salary</div></div>
+        <div class="method-item"><div class="m-label">Study scope</div><div class="m-val">180 classrooms, 3 yrs</div></div>
+        <div class="method-item"><div class="m-label">Revenue model</div><div class="m-val">Net of TS investment</div></div>
+      </div>
+      <p style="font-size:11.5px;color:var(--ts-slate);margin-top:13px;line-height:1.65;">
+        Projected retention applies the NIEER-documented 54% relative increase to your current rate. Default replacement cost of $8,000 is based on BLS median ECE wage (~$33,000) and SHRM estimates of 20–30% of annual salary for frontline service roles. All figures are projections for planning purposes only.
+      </p>
+    </div>
+
   </div>
 </div>
 
@@ -622,8 +623,7 @@
     const tuition          = parseInt($('tuitionRate').value) || 12000;
 
     const projectedRetention = Math.min(0.99, currentRetention * 1.54);
-    const projectedAttrition = 1 - projectedRetention;
-    $('projectedAttrition').textContent = (projectedAttrition * 100).toFixed(1) + '%';
+    $('projectedAttrition').textContent = (projectedRetention * 100).toFixed(1) + '%';
 
     const totalTeachers    = classrooms * teachersPerRoom;
     const teachersLostNow  = Math.round(totalTeachers * (1 - currentRetention));
