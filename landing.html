@@ -195,47 +195,53 @@
        NIEER SECTION
     ════════════════════════════════ */
     .nieer-section {
-      background: #f0f7fc;
-      padding: 72px 40px;
+      background: white;
+      padding: 80px 40px;
+      border-top: 1px solid #e8eef4;
     }
 
     .nieer-inner {
-      max-width: 960px;
+      max-width: 1100px;
       margin: 0 auto;
     }
 
     .nieer-box {
-      background: var(--ts-blue-dark);
-      border-radius: 16px;
-      padding: 52px 52px 48px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 52px;
+      gap: 72px;
       align-items: center;
     }
 
-    .nieer-quote {
-      font-size: clamp(18px, 2.2vw, 24px);
-      font-weight: 800;
-      color: white;
-      line-height: 1.45;
+    .nieer-headline {
+      font-size: clamp(26px, 3vw, 38px);
+      font-weight: 900;
+      color: var(--ts-navy);
+      line-height: 1.15;
+      letter-spacing: -0.3px;
+      margin-bottom: 20px;
     }
 
-    .nieer-quote .pct {
-      color: var(--ts-yellow);
+    .nieer-headline .pct {
+      color: var(--ts-blue);
+    }
+
+    .nieer-body {
+      font-size: clamp(15px, 1.6vw, 17px);
+      color: var(--ts-slate);
+      line-height: 1.7;
     }
 
     .nieer-source {
-      margin-top: 18px;
+      margin-top: 24px;
       font-size: 12.5px;
-      color: rgba(255,255,255,0.52);
+      color: #aab4bc;
       font-style: italic;
       line-height: 1.5;
     }
 
     /* ── Retention chart ── */
     .chart-card {
-      background: white;
+      background: #f4f9fd;
       border-radius: 12px;
       padding: 28px 24px 22px;
     }
@@ -357,8 +363,7 @@
       .nieer-section { padding: 48px 24px; }
       .nieer-box {
         grid-template-columns: 1fr;
-        gap: 36px;
-        padding: 36px 28px;
+        gap: 40px;
       }
       .site-header { padding: 16px 24px; }
     }
@@ -467,11 +472,8 @@
       <div class="nieer-box">
 
         <div>
-          <p class="nieer-quote">
-            Teaching Strategies has been shown to improve teacher retention by up to
-            <span class="pct">59%</span>,
-            validated by independent research from NIEER.
-          </p>
+          <h2 class="nieer-headline">Teacher Retention Rate<br>Increased by <span class="pct">59%</span></h2>
+          <p class="nieer-body">Teaching Strategies has been shown to improve teacher retention by up to 59%, validated by independent research from the National Institute for Early Education Research (NIEER). Across schools and child care centers, the use of our integrated curriculum, assessment, and professional development ecosystem increased the teacher retention rate by 59%.</p>
           <p class="nieer-source">National Institute for Early Education Research (NIEER)</p>
         </div>
 
