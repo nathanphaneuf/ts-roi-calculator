@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Report Is Ready — Teaching Strategies</title>
+  <style>
+    :root {
+      --ts-blue:       #007BC2;
+      --ts-blue-dark:  #00437C;
+      --ts-blue-sky:   #0099CC;
+      --ts-yellow:     #FFBC10;
+      --ts-orange:     #E34D20;
+      --ts-navy:       #0D1F2D;
+      --ts-slate:      #4A5F70;
+      --font: 'Gilmer', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: #f4f9fd;
+      color: var(--ts-navy);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      background: white;
+      padding: 18px 40px;
+      border-bottom: 1px solid #dde8f2;
+      flex-shrink: 0;
+    }
+    .site-header img {
+      height: 36px;
+      width: auto;
+      display: block;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      flex: 1;
+      background: linear-gradient(140deg, var(--ts-blue-dark) 0%, var(--ts-blue) 55%, var(--ts-blue-sky) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 85% 15%, rgba(255,255,255,0.05) 0%, transparent 50%),
+        radial-gradient(circle at 8%  80%, rgba(0,153,204,0.12)   0%, transparent 45%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      max-width: 640px;
+      text-align: center;
+      position: relative; z-index: 1;
+    }
+
+    /* Checkmark badge */
+    .check-badge {
+      width: 56px; height: 56px;
+      background: rgba(43,182,115,0.18);
+      border: 2px solid rgba(43,182,115,0.50);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 28px;
+    }
+    .check-badge svg { display: block; }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: clamp(30px, 4.5vw, 52px);
+      font-weight: 900;
+      line-height: 1.1;
+      color: white;
+      letter-spacing: -0.4px;
+      margin-bottom: 20px;
+    }
+
+    .subhead {
+      font-size: clamp(15px, 2vw, 18px);
+      color: rgba(255,255,255,0.78);
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      height: 54px;
+      padding: 0 36px;
+      background: var(--ts-orange);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      text-decoration: none;
+      line-height: 54px;
+      transition: background 0.18s, transform 0.1s, box-shadow 0.18s;
+      box-shadow: 0 4px 16px rgba(227,77,32,0.38);
+    }
+    .cta-btn:hover {
+      background: #c9441c;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(227,77,32,0.48);
+    }
+    .cta-btn:active { transform: translateY(0); }
+
+    @media (max-width: 600px) {
+      .site-header { padding: 16px 24px; }
+      .hero { padding: 60px 24px; }
+      .cta-btn { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <img src="images/TS_Logo_K.png" alt="Teaching Strategies" />
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+
+      <div class="check-badge">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2BB673" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+
+      <p class="eyebrow">Report Ready</p>
+      <h1>Your detailed report is ready.</h1>
+      <p class="subhead">Want to refine your estimate using your actual staffing costs—and see how centers like yours are achieving these results?</p>
+
+      <!-- Link to be made functional when scheduling tool is integrated -->
+      <a href="#" class="cta-btn">Schedule a walkthrough</a>
+
+    </div>
+  </section>
+
+</body>
+</html>
