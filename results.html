@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Turnover Cost Results — Teaching Strategies</title>
+  <style>
+    /* ══════════════════════════════════════
+       BRAND PALETTE — Teaching Strategies
+    ══════════════════════════════════════ */
+    :root {
+      --ts-blue:        #007BC2;
+      --ts-blue-dark:   #00437C;
+      --ts-blue-sky:    #0099CC;
+      --ts-blue-light:  #E6F4FB;
+      --ts-green:       #2BB673;
+      --ts-yellow:      #FFBC10;
+      --ts-orange:      #E34D20;
+      --ts-navy:        #0D1F2D;
+      --ts-slate:       #4A5F70;
+      --ts-border:      #C2DCF0;
+      --ts-white:       #ffffff;
+      --font: 'Gilmer', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: var(--ts-white);
+      color: var(--ts-navy);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ════════════════════════════════
+       HEADER
+    ════════════════════════════════ */
+    .site-header {
+      background: white;
+      padding: 18px 40px;
+      border-bottom: 1px solid #dde8f2;
+    }
+    .site-header img {
+      height: 36px;
+      width: auto;
+      display: block;
+    }
+
+    /* ════════════════════════════════
+       RESULTS HERO
+    ════════════════════════════════ */
+    .results-hero {
+      background: linear-gradient(140deg, var(--ts-blue-dark) 0%, var(--ts-blue) 55%, var(--ts-blue-sky) 100%);
+      padding: 64px 40px 72px;
+      position: relative;
+      overflow: hidden;
+    }
+    .results-hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 82% 10%, rgba(255,255,255,0.05) 0%, transparent 50%),
+        radial-gradient(circle at 5%  85%, rgba(0,153,204,0.12)   0%, transparent 45%);
+      pointer-events: none;
+    }
+
+    .results-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.60);
+      margin-bottom: 20px;
+    }
+    .eyebrow::before {
+      content: '';
+      display: block;
+      width: 22px; height: 2px;
+      background: var(--ts-yellow);
+      border-radius: 2px;
+    }
+
+    .results-headline {
+      font-size: clamp(20px, 2.8vw, 32px);
+      font-weight: 700;
+      line-height: 1.2;
+      color: rgba(255,255,255,0.90);
+      margin-bottom: 4px;
+    }
+
+    .cost-figure {
+      display: block;
+      font-size: clamp(44px, 6.5vw, 76px);
+      font-weight: 900;
+      line-height: 1.0;
+      color: var(--ts-yellow);
+      letter-spacing: -1px;
+      margin: 8px 0 4px;
+    }
+
+    .cost-figure-label {
+      font-size: clamp(18px, 2.2vw, 26px);
+      font-weight: 700;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 12px;
+    }
+
+    .results-basis {
+      font-size: 14.5px;
+      color: rgba(255,255,255,0.62);
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .annual-callout {
+      background: rgba(255,255,255,0.10);
+      border-left: 4px solid var(--ts-yellow);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      font-size: 16px;
+      color: rgba(255,255,255,0.88);
+      line-height: 1.55;
+      margin-bottom: 24px;
+      max-width: 660px;
+    }
+    .annual-callout strong { color: white; font-weight: 900; }
+
+    .retention-message {
+      font-size: 15px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.7;
+      max-width: 660px;
+      margin-bottom: 44px;
+    }
+    .retention-message strong { color: white; }
+
+    /* Stats row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .stat-box {
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 12px;
+      padding: 22px 18px;
+      text-align: center;
+    }
+
+    .stat-num {
+      display: block;
+      font-size: clamp(26px, 3.2vw, 38px);
+      font-weight: 900;
+      color: white;
+      line-height: 1.05;
+      margin-bottom: 7px;
+    }
+    .stat-num.green { color: #5de3a5; }
+
+    .stat-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.45;
+      font-weight: 600;
+    }
+
+    /* ════════════════════════════════
+       COST BREAKDOWN
+    ════════════════════════════════ */
+    .cost-breakdown {
+      background: #f4f9fd;
+      padding: 72px 40px;
+    }
+
+    .section-inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ts-blue);
+      margin-bottom: 10px;
+    }
+
+    .section-headline {
+      font-size: clamp(22px, 2.8vw, 32px);
+      font-weight: 900;
+      color: var(--ts-navy);
+      line-height: 1.2;
+      letter-spacing: -0.2px;
+      margin-bottom: 36px;
+    }
+
+    .cost-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .cost-card {
+      background: white;
+      border-radius: 12px;
+      padding: 28px 24px;
+      border: 1px solid #dde8f2;
+      box-shadow: 0 2px 12px rgba(0,67,124,0.06);
+    }
+
+    .cost-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+      flex-shrink: 0;
+    }
+    .cost-icon.blue   { background: var(--ts-blue-light); }
+    .cost-icon.orange { background: #fdf0eb; }
+    .cost-icon.purple { background: #f0edf7; }
+
+    .cost-card h3 {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--ts-navy);
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .cost-amount {
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--ts-blue-dark);
+      margin-bottom: 10px;
+      line-height: 1;
+    }
+    .cost-amount .per-year {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ts-slate);
+      margin-left: 4px;
+    }
+
+    .cost-card p {
+      font-size: 13.5px;
+      color: var(--ts-slate);
+      line-height: 1.65;
+    }
+
+    .disclaimer {
+      font-size: 12px;
+      color: #9aabb5;
+      font-style: italic;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    /* ════════════════════════════════
+       PRIMARY CTA — FULL SAVINGS REPORT
+    ════════════════════════════════ */
+    .cta-primary {
+      background: var(--ts-navy);
+      padding: 80px 40px;
+    }
+
+    .cta-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    .cta-lead {
+      font-size: clamp(18px, 2.4vw, 26px);
+      font-weight: 900;
+      color: white;
+      text-align: center;
+      margin-bottom: 56px;
+      line-height: 1.3;
+      max-width: 680px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .cta-content h2 {
+      font-size: clamp(20px, 2.4vw, 28px);
+      font-weight: 900;
+      color: white;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+
+    .cta-content > p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.65;
+      margin-bottom: 24px;
+    }
+
+    /* Report preview image
+       Replace images/report-preview.png with a screenshot of index.html
+       Suggested: open index.html in browser, take full-page screenshot, save as images/report-preview.png */
+    .report-preview {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.12);
+      position: relative;
+      background: rgba(255,255,255,0.05);
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .report-preview img {
+      width: 100%;
+      display: block;
+      filter: blur(2.5px) brightness(0.80);
+    }
+    .report-preview-overlay {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,10,30,0.25);
+    }
+    .report-preview-badge {
+      background: var(--ts-orange);
+      color: white;
+      font-size: 13.5px;
+      font-weight: 800;
+      padding: 11px 22px;
+      border-radius: 7px;
+      letter-spacing: 0.2px;
+      box-shadow: 0 4px 16px rgba(227,77,32,0.40);
+    }
+    .report-preview-placeholder {
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    /* ── Gated form (dark theme) ── */
+    .gate-form {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .gate-form .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .gate-form .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .gate-form label {
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: 0.2px;
+    }
+    .gate-form label .optional {
+      font-weight: 400;
+      color: rgba(255,255,255,0.38);
+      margin-left: 4px;
+    }
+
+    .gate-form input,
+    .gate-form select {
+      height: 44px;
+      padding: 0 13px;
+      border: 1.5px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.07);
+      color: white;
+      font-family: var(--font);
+      font-size: 14px;
+      transition: border-color 0.18s, background 0.18s;
+    }
+    .gate-form select { cursor: pointer; }
+    .gate-form select option { background: #0d1f2d; color: white; }
+    .gate-form input::placeholder { color: rgba(255,255,255,0.30); }
+    .gate-form input:focus,
+    .gate-form select:focus {
+      outline: none;
+      border-color: var(--ts-yellow);
+      background: rgba(255,255,255,0.11);
+    }
+
+    .gate-btn {
+      width: 100%;
+      height: 52px;
+      background: var(--ts-orange);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font);
+      font-size: 15.5px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.1s, box-shadow 0.18s;
+      box-shadow: 0 4px 16px rgba(227,77,32,0.35);
+      letter-spacing: 0.3px;
+      margin-top: 4px;
+    }
+    .gate-btn:hover {
+      background: #c9441c;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(227,77,32,0.45);
+    }
+    .gate-btn:active { transform: translateY(0); }
+
+    /* ════════════════════════════════
+       BEYOND COST SAVINGS
+    ════════════════════════════════ */
+    .beyond-section {
+      background: white;
+      padding: 72px 40px;
+      border-top: 1px solid #e8eef4;
+    }
+
+    .beyond-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .beyond-inner .section-eyebrow {
+      display: block;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .beyond-inner h2 {
+      font-size: clamp(22px, 2.6vw, 30px);
+      font-weight: 900;
+      color: var(--ts-navy);
+      margin-bottom: 18px;
+      line-height: 1.2;
+    }
+
+    .beyond-inner p {
+      font-size: 16px;
+      color: var(--ts-slate);
+      line-height: 1.78;
+      margin-bottom: 14px;
+    }
+
+    .beyond-source {
+      font-size: 12px !important;
+      color: #aab4bc !important;
+      font-style: italic;
+      margin-bottom: 0 !important;
+    }
+
+    /* ════════════════════════════════
+       SECONDARY CTA — SPECIALIST
+    ════════════════════════════════ */
+    .cta-secondary {
+      background: #f0f7fc;
+      padding: 80px 40px;
+      border-top: 1px solid var(--ts-border);
+    }
+
+    .cta-secondary .section-inner {
+      max-width: 800px;
+    }
+
+    .specialist-intro {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .specialist-intro h2 {
+      font-size: clamp(22px, 2.6vw, 30px);
+      font-weight: 900;
+      color: var(--ts-navy);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .specialist-intro p {
+      font-size: 16px;
+      color: var(--ts-slate);
+      line-height: 1.65;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ── Specialist form (light theme) ── */
+    .specialist-form-wrap {
+      background: white;
+      border-radius: 14px;
+      padding: 40px;
+      box-shadow: 0 4px 24px rgba(0,67,124,0.10);
+    }
+
+    .specialist-form .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .specialist-form .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .specialist-form label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--ts-slate);
+    }
+    .specialist-form label .optional {
+      font-weight: 400;
+      color: #b0bec5;
+      margin-left: 4px;
+    }
+
+    .specialist-form input,
+    .specialist-form select {
+      height: 46px;
+      padding: 0 13px;
+      border: 1.5px solid #d0dde8;
+      border-radius: 8px;
+      background: white;
+      color: var(--ts-navy);
+      font-family: var(--font);
+      font-size: 14px;
+      transition: border-color 0.18s;
+    }
+    .specialist-form input::placeholder { color: #b0bec5; }
+    .specialist-form input:focus,
+    .specialist-form select:focus {
+      outline: none;
+      border-color: var(--ts-blue);
+    }
+
+    .specialist-footer-note {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
+      color: #9aabb5;
+      font-style: italic;
+    }
+
+    /* ════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════ */
+    @media (max-width: 860px) {
+      .site-header        { padding: 16px 24px; }
+      .results-hero       { padding: 48px 24px 56px; }
+      .stats-row          { grid-template-columns: 1fr 1fr; }
+      .cost-breakdown,
+      .cta-primary,
+      .beyond-section,
+      .cta-secondary      { padding: 52px 24px; }
+      .cost-cards         { grid-template-columns: 1fr; }
+      .cta-grid           { grid-template-columns: 1fr; gap: 40px; }
+      .gate-form .form-row          { grid-template-columns: 1fr; }
+      .specialist-form .form-row    { grid-template-columns: 1fr; }
+      .specialist-form-wrap         { padding: 28px 20px; }
+    }
+
+    @media (max-width: 520px) {
+      .stats-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ HEADER ══════════════════════════════════════════════ -->
+  <header class="site-header">
+    <img src="images/TS_Logo_K.png" alt="Teaching Strategies" />
+  </header>
+
+  <!-- ══ RESULTS HERO ════════════════════════════════════════ -->
+  <section class="results-hero">
+    <div class="results-inner">
+      <p class="eyebrow">Your Results</p>
+
+      <p class="results-headline">Estimated cost of turnover:</p>
+      <span class="cost-figure" id="res-3year">—</span>
+      <p class="cost-figure-label">over 3 years</p>
+
+      <p class="results-basis">Based on your inputs and typical turnover and cost benchmarks for centers like yours.</p>
+
+      <div class="annual-callout">
+        That means your center may be losing approximately <strong id="res-annual">—</strong> per year to turnover today.
+      </div>
+
+      <p class="retention-message">
+        Improving retention could significantly reduce these costs.<br><br>
+        <strong>Teaching Strategies</strong> helps centers improve teacher retention—by up to <strong>59%</strong>, as validated by independent research from NIEER.
+      </p>
+
+      <div class="stats-row">
+        <div class="stat-box">
+          <span class="stat-num" id="res-teachers-lost">—</span>
+          <span class="stat-label">Teachers lost annually at current rate</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num green" id="res-teachers-retained">—</span>
+          <span class="stat-label">Could be retained with Teaching Strategies</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num green" id="res-annual-savings">—</span>
+          <span class="stat-label">Potential annual savings in rehiring costs</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ COST BREAKDOWN ══════════════════════════════════════ -->
+  <section class="cost-breakdown">
+    <div class="section-inner">
+      <p class="section-eyebrow">Where costs accumulate</p>
+      <h2 class="section-headline">You may be losing money through:</h2>
+
+      <div class="cost-cards">
+
+        <div class="cost-card">
+          <div class="cost-icon blue">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#007BC2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <h3>Hiring and training costs</h3>
+          <div class="cost-amount"><span id="cost-hiring">—</span><span class="per-year">/ year</span></div>
+          <p>Recruiting, onboarding, and lost productivity. Estimated at ~$8,000 per teacher replaced—approximately 24% of median ECE salary per SHRM benchmarks.</p>
+        </div>
+
+        <div class="cost-card">
+          <div class="cost-icon orange">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E34D20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"/>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+          </div>
+          <h3>Lost enrollment revenue</h3>
+          <div class="cost-amount"><span id="cost-enrollment">—</span><span class="per-year">/ year est.</span></div>
+          <p>Teacher turnover disrupts classroom stability. Families notice instability and may disenroll, reducing tuition revenue each year.</p>
+        </div>
+
+        <div class="cost-card">
+          <div class="cost-icon purple">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#73539E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <h3>Day-to-day staffing disruptions</h3>
+          <div class="cost-amount"><span id="cost-disruption">—</span><span class="per-year">/ year est.</span></div>
+          <p>Substitute coverage, administrative overhead, and director time spent on recruitment instead of program quality.</p>
+        </div>
+
+      </div>
+      <p class="disclaimer">Actual results may vary based on your center's staffing model and implementation.</p>
+    </div>
+  </section>
+
+  <!-- ══ PRIMARY CTA — GET FULL SAVINGS REPORT ═══════════════ -->
+  <section class="cta-primary" id="full-report">
+    <div class="cta-inner">
+      <p class="cta-lead">Most centers don't realize the full cost of turnover until they see it broken down</p>
+
+      <div class="cta-grid">
+
+        <div class="cta-content">
+          <h2>Get your full savings report</h2>
+          <p>See a breakdown of where these costs come from—and how to reduce them</p>
+
+          <!--
+            Report preview image.
+            TO UPDATE: screenshot index.html in your browser (full page),
+            save as images/report-preview.png, then push to repo.
+          -->
+          <div class="report-preview" id="report-preview-wrap">
+            <img
+              src="images/report-preview.png"
+              alt="Full savings report preview"
+              onerror="document.getElementById('report-preview-wrap').innerHTML='<p class=\'report-preview-placeholder\'>Full report preview coming soon</p>';"
+            />
+            <div class="report-preview-overlay">
+              <span class="report-preview-badge">View Full Report</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <!--
+            ╔══════════════════════════════════════════════════════════╗
+            ║  GRAVITY FORMS — PRIMARY CTA (Get Full Savings Report)   ║
+            ║  Replace this <form>…</form> block with:                 ║
+            ║    [gravityform id="Y" title="false"                     ║
+            ║     description="false" ajax="true"]                     ║
+            ║                                                          ║
+            ║  Required fields: first_name, last_name, work_email      ║
+            ║  Optional fields: title, center_name,                    ║
+            ║                   enrollment_range, state                ║
+            ╚══════════════════════════════════════════════════════════╝
+          -->
+          <form class="gate-form" action="#" method="POST">
+
+            <div class="form-row">
+              <div class="field-group">
+                <label for="p-first">First Name</label>
+                <input type="text" id="p-first" name="first_name" placeholder="Jane" required />
+              </div>
+              <div class="field-group">
+                <label for="p-last">Last Name</label>
+                <input type="text" id="p-last" name="last_name" placeholder="Smith" required />
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="p-email">Work Email</label>
+              <input type="email" id="p-email" name="work_email" placeholder="jane@yourcenter.org" required />
+            </div>
+
+            <div class="field-group">
+              <label for="p-title">Title <span class="optional">(optional)</span></label>
+              <input type="text" id="p-title" name="title" placeholder="Director" />
+            </div>
+
+            <div class="field-group">
+              <label for="p-center">Center Name <span class="optional">(optional)</span></label>
+              <input type="text" id="p-center" name="center_name" placeholder="Sunshine Learning Center" />
+            </div>
+
+            <div class="form-row">
+              <div class="field-group">
+                <label for="p-enrollment">Enrollment Range <span class="optional">(optional)</span></label>
+                <select id="p-enrollment" name="enrollment_range">
+                  <option value="" disabled selected>Select range</option>
+                  <option value="1-25">1–25 children</option>
+                  <option value="26-50">26–50 children</option>
+                  <option value="51-100">51–100 children</option>
+                  <option value="101-200">101–200 children</option>
+                  <option value="201+">201+ children</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label for="p-state">State <span class="optional">(optional)</span></label>
+                <select id="p-state" name="state">
+                  <option value="" disabled selected>Select state</option>
+                  <option>AL</option><option>AK</option><option>AZ</option><option>AR</option>
+                  <option>CA</option><option>CO</option><option>CT</option><option>DE</option>
+                  <option>FL</option><option>GA</option><option>HI</option><option>ID</option>
+                  <option>IL</option><option>IN</option><option>IA</option><option>KS</option>
+                  <option>KY</option><option>LA</option><option>ME</option><option>MD</option>
+                  <option>MA</option><option>MI</option><option>MN</option><option>MS</option>
+                  <option>MO</option><option>MT</option><option>NE</option><option>NV</option>
+                  <option>NH</option><option>NJ</option><option>NM</option><option>NY</option>
+                  <option>NC</option><option>ND</option><option>OH</option><option>OK</option>
+                  <option>OR</option><option>PA</option><option>RI</option><option>SC</option>
+                  <option>SD</option><option>TN</option><option>TX</option><option>UT</option>
+                  <option>VT</option><option>VA</option><option>WA</option><option>WV</option>
+                  <option>WI</option><option>WY</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="gate-btn">Get your full savings report →</button>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ BEYOND COST SAVINGS ════════════════════════════════ -->
+  <section class="beyond-section">
+    <div class="beyond-inner">
+      <span class="section-eyebrow">Beyond cost savings</span>
+      <h2>Children thrive when teachers stay</h2>
+      <p>In addition to improving retention, independent research from NIEER found that children in classrooms using Teaching Strategies demonstrated significantly greater growth across all developmental domains, including language, literacy, math, and social-emotional development.</p>
+      <p class="beyond-source">National Institute for Early Education Research (NIEER)</p>
+    </div>
+  </section>
+
+  <!-- ══ SECONDARY CTA — REVIEW WITH SPECIALIST ════════════ -->
+  <section class="cta-secondary">
+    <div class="section-inner">
+
+      <div class="specialist-intro">
+        <h2>Review your results with a specialist</h2>
+        <p>Connect with a Teaching Strategies expert to walk through your numbers and explore what improved retention could look like at your center.</p>
+      </div>
+
+      <!--
+        ╔══════════════════════════════════════════════════════════╗
+        ║  GRAVITY FORMS — SECONDARY CTA (Review with Specialist)  ║
+        ║  Replace this <form>…</form> block with:                 ║
+        ║    [gravityform id="Z" title="false"                     ║
+        ║     description="false" ajax="true"]                     ║
+        ║                                                          ║
+        ║  Required: first_name, last_name, work_email, phone,     ║
+        ║            title, center_name, state                     ║
+        ║  Optional: enrollment_range                              ║
+        ╚══════════════════════════════════════════════════════════╝
+      -->
+      <div class="specialist-form-wrap">
+        <form class="specialist-form" action="#" method="POST">
+
+          <div class="form-row">
+            <div class="field-group">
+              <label for="s-first">First Name</label>
+              <input type="text" id="s-first" name="first_name" placeholder="Jane" required />
+            </div>
+            <div class="field-group">
+              <label for="s-last">Last Name</label>
+              <input type="text" id="s-last" name="last_name" placeholder="Smith" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field-group">
+              <label for="s-email">Work Email</label>
+              <input type="email" id="s-email" name="work_email" placeholder="jane@yourcenter.org" required />
+            </div>
+            <div class="field-group">
+              <label for="s-phone">Phone</label>
+              <input type="tel" id="s-phone" name="phone" placeholder="(555) 000-0000" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field-group">
+              <label for="s-title">Title</label>
+              <input type="text" id="s-title" name="title" placeholder="Director" required />
+            </div>
+            <div class="field-group">
+              <label for="s-center">Center Name</label>
+              <input type="text" id="s-center" name="center_name" placeholder="Sunshine Learning Center" required />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field-group">
+              <label for="s-state">State</label>
+              <select id="s-state" name="state" required>
+                <option value="" disabled selected>Select state</option>
+                <option>AL</option><option>AK</option><option>AZ</option><option>AR</option>
+                <option>CA</option><option>CO</option><option>CT</option><option>DE</option>
+                <option>FL</option><option>GA</option><option>HI</option><option>ID</option>
+                <option>IL</option><option>IN</option><option>IA</option><option>KS</option>
+                <option>KY</option><option>LA</option><option>ME</option><option>MD</option>
+                <option>MA</option><option>MI</option><option>MN</option><option>MS</option>
+                <option>MO</option><option>MT</option><option>NE</option><option>NV</option>
+                <option>NH</option><option>NJ</option><option>NM</option><option>NY</option>
+                <option>NC</option><option>ND</option><option>OH</option><option>OK</option>
+                <option>OR</option><option>PA</option><option>RI</option><option>SC</option>
+                <option>SD</option><option>TN</option><option>TX</option><option>UT</option>
+                <option>VT</option><option>VA</option><option>WA</option><option>WV</option>
+                <option>WI</option><option>WY</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="s-enrollment">Enrollment Range <span class="optional">(optional)</span></label>
+              <select id="s-enrollment" name="enrollment_range">
+                <option value="" disabled selected>Select range</option>
+                <option value="1-25">1–25 children</option>
+                <option value="26-50">26–50 children</option>
+                <option value="51-100">51–100 children</option>
+                <option value="101-200">101–200 children</option>
+                <option value="201+">201+ children</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="gate-btn" style="margin-top:8px;">Review your results with a specialist →</button>
+
+        </form>
+      </div>
+
+      <p class="specialist-footer-note">Based on independently validated improvements in teacher retention.</p>
+
+    </div>
+  </section>
+
+  <!-- ══ CALCULATIONS ════════════════════════════════════════ -->
+  <script>
+    // ── Parse URL query params from landing.html form ───────────
+    // Expected: ?children=50&teachers=10&tuition=12000&turnover=30
+    const params = new URLSearchParams(window.location.search);
+
+    const childrenEnrolled = Math.max(1,   parseInt(params.get('children')) || 50);
+    const numTeachers      = Math.max(1,   parseInt(params.get('teachers')) || 10);
+    const annualTuition    = Math.max(0,   parseInt(params.get('tuition'))  || 12000);
+    const turnoverPct      = Math.min(100, Math.max(0, parseInt(params.get('turnover')) || 30));
+
+    // ── Core calculations — matching index.html logic ────────────
+    const REPLACEMENT_COST  = 8000;   // ~24% of median ECE salary (SHRM)
+    const DISRUPTION_RATE   = 1500;   // sub coverage + admin overhead per departure
+    const ENROLLMENT_CHURN  = 0.05;   // 5% of a teacher's children leave when teacher departs
+
+    const attritionRate      = turnoverPct / 100;
+    const currentRetention   = 1 - attritionRate;
+    const projectedRetention = Math.min(0.99, currentRetention * 1.59);
+
+    const teachersLostNow    = Math.round(numTeachers * attritionRate);
+    const teachersLostProj   = Math.round(numTeachers * (1 - projectedRetention));
+    const teachersRetained   = Math.max(0, teachersLostNow - teachersLostProj);
+
+    // Annual cost components
+    const annualHiringCost    = teachersLostNow * REPLACEMENT_COST;
+    const childrenPerTeacher  = childrenEnrolled / numTeachers;
+    const childrenAtRisk      = Math.round(teachersLostNow * childrenPerTeacher * ENROLLMENT_CHURN);
+    const enrollmentRevAtRisk = childrenAtRisk * annualTuition;
+    const disruptionCost      = teachersLostNow * DISRUPTION_RATE;
+
+    const totalAnnualCost = annualHiringCost + enrollmentRevAtRisk + disruptionCost;
+    const threeYearCost   = totalAnnualCost * 3;
+    const annualSavings   = teachersRetained * REPLACEMENT_COST;
+
+    // ── Format helpers ───────────────────────────────────────────
+    const fmt  = n => '$' + Math.round(n).toLocaleString();
+    const fmtN = n => Math.round(n).toLocaleString();
+
+    // ── Populate results ─────────────────────────────────────────
+    document.getElementById('res-3year').textContent             = fmt(threeYearCost);
+    document.getElementById('res-annual').textContent            = fmt(totalAnnualCost);
+    document.getElementById('res-teachers-lost').textContent     = fmtN(teachersLostNow);
+    document.getElementById('res-teachers-retained').textContent = fmtN(teachersRetained);
+    document.getElementById('res-annual-savings').textContent    = fmt(annualSavings);
+    document.getElementById('cost-hiring').textContent           = fmt(annualHiringCost);
+    document.getElementById('cost-enrollment').textContent       = fmt(enrollmentRevAtRisk);
+    document.getElementById('cost-disruption').textContent       = fmt(disruptionCost);
+  </script>
+
+</body>
+</html>

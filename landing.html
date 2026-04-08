@@ -404,7 +404,7 @@
           ║  Add CSS class "lp-form" to the GF form wrapper     ║
           ╚══════════════════════════════════════════════════════╝
         -->
-        <form class="lp-form" action="#" method="POST">
+        <form class="lp-form" id="lp-form" action="#" method="POST">
 
           <div class="field-grid">
             <div class="field-group">
@@ -520,5 +520,22 @@
     </div>
   </section>
 
+  <script>
+    // On submit, redirect to results.html with form values as URL params.
+    // When live on WordPress with Gravity Forms, GF's confirmation redirect
+    // should append: ?children={field:1}&teachers={field:2}&tuition={field:3}&turnover={field:4}
+    document.getElementById('lp-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const children = document.getElementById('children_enrolled').value || 50;
+      const teachers = document.getElementById('num_teachers').value      || 10;
+      const tuition  = document.getElementById('annual_tuition').value    || 12000;
+      const turnover = document.getElementById('turnover_rate').value     || 30;
+      window.location.href =
+        'results.html?children=' + encodeURIComponent(children) +
+        '&teachers='  + encodeURIComponent(teachers) +
+        '&tuition='   + encodeURIComponent(tuition) +
+        '&turnover='  + encodeURIComponent(turnover);
+    });
+  </script>
 </body>
 </html>
