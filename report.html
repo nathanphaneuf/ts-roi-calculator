@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teacher Turnover Cost Report — Teaching Strategies</title>
+  <style>
+    :root {
+      --ts-blue:       #007BC2;
+      --ts-blue-dark:  #00437C;
+      --ts-blue-sky:   #0099CC;
+      --ts-blue-light: #E6F4FB;
+      --ts-green:      #2BB673;
+      --ts-yellow:     #FFBC10;
+      --ts-orange:     #E34D20;
+      --ts-navy:       #0D1F2D;
+      --ts-slate:      #4A5F70;
+      --ts-rule:       #d0dde8;
+      --font: 'Gilmer', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+      /* Document sizing — 8.5" × 11" at 96 dpi */
+      --page-w: 816px;
+      --page-pad: 64px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: #e8eef4;
+      color: var(--ts-navy);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ════════════════════════════════
+       SCREEN TOOLBAR (hidden on print)
+    ════════════════════════════════ */
+    .screen-toolbar {
+      background: var(--ts-navy);
+      padding: 12px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .toolbar-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.70);
+      letter-spacing: 0.3px;
+    }
+    .toolbar-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-print {
+      height: 36px;
+      padding: 0 20px;
+      background: var(--ts-blue);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: background 0.15s;
+    }
+    .btn-print:hover { background: var(--ts-blue-dark); }
+
+    /* ════════════════════════════════
+       DOCUMENT WRAPPER
+    ════════════════════════════════ */
+    .doc-wrap {
+      padding: 40px 24px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* ════════════════════════════════
+       PAGE SHEET
+    ════════════════════════════════ */
+    .page {
+      width: var(--page-w);
+      max-width: 100%;
+      background: white;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.14);
+      position: relative;
+    }
+
+    /* Dashed page-break indicator (screen only) */
+    .page + .page {
+      border-top: 2px dashed #c8d8e8;
+      margin-top: 0;
+    }
+    .page-break-label {
+      width: var(--page-w);
+      max-width: 100%;
+      text-align: right;
+      font-size: 10px;
+      font-weight: 600;
+      color: #a0b0bc;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 6px 8px 4px;
+    }
+
+    /* ════════════════════════════════
+       REPORT HEADER (every page)
+    ════════════════════════════════ */
+    .report-header {
+      background: var(--ts-blue-dark);
+      padding: 20px var(--page-pad);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .report-header img {
+      height: 28px;
+      width: auto;
+      /* Invert the dark logo to white */
+      filter: brightness(0) invert(1);
+    }
+    .report-header-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+
+    /* ════════════════════════════════
+       PAGE CONTENT
+    ════════════════════════════════ */
+    .page-body {
+      padding: 48px var(--page-pad) 52px;
+    }
+
+    /* Shared type styles */
+    .report-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ts-blue);
+      margin-bottom: 10px;
+    }
+
+    h1.report-h1 {
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.3px;
+      color: var(--ts-navy);
+      margin-bottom: 6px;
+    }
+    h1.report-h1 .cost { color: var(--ts-blue-dark); }
+
+    h2.report-h2 {
+      font-size: 17px;
+      font-weight: 900;
+      color: var(--ts-navy);
+      line-height: 1.25;
+      margin-bottom: 10px;
+      letter-spacing: -0.1px;
+    }
+
+    h3.report-h3 {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--ts-navy);
+      margin-bottom: 7px;
+    }
+
+    .report-body {
+      font-size: 13.5px;
+      color: var(--ts-slate);
+      line-height: 1.72;
+    }
+
+    .report-rule {
+      border: none;
+      border-top: 1px solid var(--ts-rule);
+      margin: 28px 0;
+    }
+
+    /* NIEER call-out stripe */
+    .nieer-stripe {
+      background: var(--ts-blue-light);
+      border-left: 4px solid var(--ts-blue);
+      border-radius: 0 8px 8px 0;
+      padding: 13px 16px;
+      font-size: 13px;
+      color: var(--ts-blue-dark);
+      font-weight: 600;
+      line-height: 1.55;
+      margin: 20px 0;
+    }
+    .nieer-stripe strong { color: var(--ts-blue-dark); font-weight: 900; }
+
+    /* ── AT A GLANCE BOX ── */
+    .glance-box {
+      border: 1.5px solid var(--ts-rule);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 24px 0;
+    }
+    .glance-header {
+      background: var(--ts-blue-dark);
+      padding: 12px 20px;
+    }
+    .glance-header h2 {
+      font-size: 13px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: 0.3px;
+    }
+    .glance-body {
+      padding: 20px;
+    }
+    .glance-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .glance-metric {
+      background: #f4f9fd;
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .glance-metric-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ts-slate);
+      letter-spacing: 0.3px;
+      margin-bottom: 4px;
+    }
+    .glance-metric-value {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--ts-blue-dark);
+      line-height: 1;
+    }
+
+    .glance-drivers-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--ts-navy);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .glance-drivers {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .glance-drivers li {
+      font-size: 13px;
+      color: var(--ts-slate);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .glance-drivers li::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--ts-blue);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── COST SECTION NUMBERS ── */
+    .cost-section {
+      margin-bottom: 28px;
+    }
+    .cost-section-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 8px;
+    }
+    .section-num {
+      width: 28px; height: 28px;
+      background: var(--ts-blue);
+      color: white;
+      border-radius: 50%;
+      font-size: 13px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .cost-section-head h2 { margin-bottom: 0; }
+
+    .cost-figure-inline {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--ts-blue-dark);
+      margin: 8px 0 8px 42px;
+      line-height: 1;
+    }
+    .cost-figure-inline .per-yr {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ts-slate);
+      margin-left: 4px;
+    }
+    .cost-section > .report-body { padding-left: 42px; }
+
+    /* ── RETENTION CALLOUT ── */
+    .retention-box {
+      background: linear-gradient(135deg, var(--ts-blue-dark) 0%, var(--ts-blue) 100%);
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin: 24px 0;
+      color: white;
+    }
+    .retention-box h2 {
+      font-size: 16px;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 14px;
+    }
+    .retention-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .retention-list li {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      line-height: 1.4;
+    }
+    .retention-list li::before {
+      content: '';
+      width: 7px; height: 7px;
+      background: var(--ts-yellow);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── SAVINGS TABLE ── */
+    .savings-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 13.5px;
+    }
+    .savings-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--ts-slate);
+      padding: 8px 12px;
+      border-bottom: 2px solid var(--ts-rule);
+    }
+    .savings-table th:last-child { text-align: right; }
+    .savings-table td {
+      padding: 11px 12px;
+      border-bottom: 1px solid #eef3f8;
+      color: var(--ts-navy);
+      vertical-align: top;
+    }
+    .savings-table td:last-child {
+      text-align: right;
+      font-weight: 800;
+      color: var(--ts-blue-dark);
+      white-space: nowrap;
+    }
+    .savings-table td.sub {
+      font-size: 12px;
+      color: var(--ts-slate);
+    }
+    .savings-table tr.total td {
+      border-top: 2px solid var(--ts-blue-dark);
+      border-bottom: none;
+      padding-top: 13px;
+      font-weight: 900;
+      font-size: 15px;
+      color: var(--ts-blue-dark);
+    }
+    .savings-table tr.total td:first-child { color: var(--ts-navy); }
+
+    /* ── DOMAINS GRID ── */
+    .domains-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 14px 0;
+    }
+    .domain-chip {
+      background: var(--ts-blue-light);
+      border-radius: 6px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ts-blue-dark);
+    }
+    .domain-chip::before {
+      content: '';
+      width: 8px; height: 8px;
+      background: var(--ts-blue);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── RETENTION DRIVERS ── */
+    .drivers-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 14px 0;
+    }
+    .driver-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .driver-icon {
+      width: 34px; height: 34px;
+      background: var(--ts-blue-light);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .driver-item p {
+      font-size: 13.5px;
+      color: var(--ts-slate);
+      line-height: 1.6;
+      padding-top: 7px;
+    }
+    .driver-item strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--ts-navy);
+      margin-bottom: 2px;
+      padding-top: 0;
+    }
+
+    /* ── CTA BOX ── */
+    .cta-box {
+      border: 1.5px solid var(--ts-rule);
+      border-radius: 10px;
+      padding: 28px 32px;
+      margin-top: 24px;
+    }
+    .cta-box h2 {
+      margin-bottom: 10px;
+    }
+    .cta-box .report-body {
+      margin-bottom: 20px;
+    }
+    .cta-checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 24px;
+    }
+    .cta-checklist li {
+      font-size: 13.5px;
+      color: var(--ts-slate);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .cta-checklist li::before {
+      content: '✓';
+      font-weight: 900;
+      color: var(--ts-green);
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+    .cta-btn-report {
+      display: inline-block;
+      height: 46px;
+      padding: 0 28px;
+      background: var(--ts-orange);
+      color: white;
+      border: none;
+      border-radius: 7px;
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      line-height: 46px;
+      transition: background 0.15s, transform 0.1s;
+      box-shadow: 0 3px 12px rgba(227,77,32,0.30);
+    }
+    .cta-btn-report:hover {
+      background: #c9441c;
+      transform: translateY(-1px);
+    }
+
+    /* ── PAGE FOOTER ── */
+    .page-footer {
+      border-top: 1px solid var(--ts-rule);
+      padding: 12px var(--page-pad);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .page-footer-note {
+      font-size: 10px;
+      color: #aab4bc;
+      font-style: italic;
+      line-height: 1.5;
+      max-width: 520px;
+    }
+    .page-num {
+      font-size: 10px;
+      font-weight: 700;
+      color: #c0ccd4;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    /* ════════════════════════════════
+       PRINT STYLES
+    ════════════════════════════════ */
+    @media print {
+      @page {
+        size: letter portrait;
+        margin: 0;
+      }
+
+      body { background: white; }
+
+      .screen-toolbar,
+      .doc-wrap > .page-break-label { display: none !important; }
+
+      .doc-wrap {
+        padding: 0;
+        gap: 0;
+        background: white;
+      }
+
+      .page {
+        box-shadow: none;
+        page-break-after: always;
+        break-after: page;
+      }
+      .page:last-child {
+        page-break-after: avoid;
+        break-after: avoid;
+      }
+      .page + .page {
+        border-top: none;
+        margin-top: 0;
+      }
+
+      .cta-btn-report { box-shadow: none; }
+    }
+
+    /* ════════════════════════════════
+       RESPONSIVE (narrow screens)
+    ════════════════════════════════ */
+    @media (max-width: 860px) {
+      :root { --page-pad: 32px; }
+      .glance-metrics { grid-template-columns: 1fr; }
+      .domains-grid   { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      :root { --page-pad: 20px; }
+      .screen-toolbar { padding: 10px 16px; }
+      .toolbar-label  { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ SCREEN TOOLBAR ════════════════════════════════════════ -->
+  <div class="screen-toolbar">
+    <span class="toolbar-label">Teacher Turnover Cost Report</span>
+    <div class="toolbar-actions">
+      <button class="btn-print" onclick="window.print()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+          <rect x="6" y="14" width="12" height="8"/>
+        </svg>
+        Print / Save PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ DOCUMENT ═══════════════════════════════════════════════ -->
+  <div class="doc-wrap">
+
+    <!-- ═══════════════════════════════
+         PAGE 1 — OVERVIEW
+    ════════════════════════════════ -->
+    <div class="page" id="page-1">
+
+      <div class="report-header">
+        <img src="images/TS_Logo_K.png" alt="Teaching Strategies" />
+        <span class="report-header-label">Teacher Retention Cost Report</span>
+      </div>
+
+      <div class="page-body">
+
+        <p class="report-eyebrow">Confidential — Prepared for Your Center</p>
+        <h1 class="report-h1">
+          You may be losing
+          <span class="cost" id="r-3year-headline">$—</span>
+          to teacher turnover over the next 3 years
+        </h1>
+
+        <p class="report-body" style="margin-top:14px; margin-bottom:0;">
+          Based on your center's inputs and typical turnover patterns, this report outlines where those costs come from—and how improving retention could reduce them.
+        </p>
+
+        <div class="nieer-stripe">
+          Teaching Strategies has been shown to improve teacher retention by up to <strong>59%</strong>, validated by independent research from NIEER.
+        </div>
+
+        <hr class="report-rule" />
+
+        <!-- AT A GLANCE -->
+        <div class="glance-box">
+          <div class="glance-header">
+            <h2>At a Glance</h2>
+          </div>
+          <div class="glance-body">
+            <p class="report-body" style="margin-bottom:16px;">
+              Based on the information you provided, your center may be experiencing significant financial impact from staff turnover.
+            </p>
+
+            <div class="glance-metrics">
+              <div class="glance-metric">
+                <div class="glance-metric-label">Estimated cost of turnover (3 years)</div>
+                <div class="glance-metric-value" id="r-3year-glance">$—</div>
+              </div>
+              <div class="glance-metric">
+                <div class="glance-metric-label">Estimated annual impact</div>
+                <div class="glance-metric-value" id="r-annual-glance">$—</div>
+              </div>
+            </div>
+
+            <p class="glance-drivers-label">Primary cost drivers:</p>
+            <ul class="glance-drivers">
+              <li>Hiring and onboarding new staff</li>
+              <li>Lost enrollment and classroom disruption</li>
+              <li>Increased operational strain</li>
+            </ul>
+
+            <div class="nieer-stripe" style="margin-top:18px; margin-bottom:0;">
+              Improving teacher retention can meaningfully reduce these costs while stabilizing your program. Centers using Teaching Strategies have improved teacher retention by up to <strong>59%</strong>, based on independent research conducted by NIEER.
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /page-body -->
+
+      <div class="page-footer">
+        <p class="page-footer-note">This report provides directional estimates based on your inputs and industry benchmarks. Actual results will vary based on your center's staffing model and implementation.</p>
+        <span class="page-num">1 of 3</span>
+      </div>
+
+    </div><!-- /page-1 -->
+
+    <div class="page-break-label">— page break —</div>
+
+    <!-- ═══════════════════════════════
+         PAGE 2 — COST BREAKDOWN
+    ════════════════════════════════ -->
+    <div class="page" id="page-2">
+
+      <div class="report-header">
+        <img src="images/TS_Logo_K.png" alt="Teaching Strategies" />
+        <span class="report-header-label">Teacher Retention Cost Report</span>
+      </div>
+
+      <div class="page-body">
+
+        <h2 class="report-h2" style="font-size:20px; margin-bottom:8px;">Breaking down the cost of turnover</h2>
+        <p class="report-body" style="margin-bottom:24px;">
+          Turnover impacts more than just hiring—it creates ripple effects across your entire program. Based on your inputs, here's how those costs are distributed:
+        </p>
+
+        <!-- 1. Hiring & Training -->
+        <div class="cost-section">
+          <div class="cost-section-head">
+            <span class="section-num">1</span>
+            <h2 class="report-h2">Hiring &amp; Training Costs</h2>
+          </div>
+          <div class="cost-figure-inline"><span id="r-cost-hiring">$—</span><span class="per-yr">/ year</span></div>
+          <p class="report-body">Recruiting, onboarding, and training new teachers requires both time and financial investment. Estimated at approximately $8,000 per teacher replaced—roughly 24% of median ECE salary, consistent with SHRM benchmarks for frontline service roles. These costs accumulate quickly with each vacancy.</p>
+        </div>
+
+        <hr class="report-rule" />
+
+        <!-- 2. Lost Enrollment Revenue -->
+        <div class="cost-section">
+          <div class="cost-section-head">
+            <span class="section-num">2</span>
+            <h2 class="report-h2">Lost Enrollment Revenue</h2>
+          </div>
+          <div class="cost-figure-inline"><span id="r-cost-enrollment">$—</span><span class="per-yr">/ year est.</span></div>
+          <p class="report-body">Staffing gaps can limit classroom capacity or disrupt continuity, affecting enrollment stability and tuition revenue. When families experience inconsistency, some may disenroll—reducing the tuition revenue your center depends on.</p>
+        </div>
+
+        <hr class="report-rule" />
+
+        <!-- 3. Operational Disruptions -->
+        <div class="cost-section">
+          <div class="cost-section-head">
+            <span class="section-num">3</span>
+            <h2 class="report-h2">Operational Disruptions</h2>
+          </div>
+          <div class="cost-figure-inline"><span id="r-cost-disruption">$—</span><span class="per-yr">/ year est.</span></div>
+          <p class="report-body">Frequent turnover increases strain on existing staff, leads to last-minute scheduling challenges, and impacts overall program consistency. This includes substitute coverage, administrative overhead, and reduced capacity for program improvement.</p>
+        </div>
+
+        <hr class="report-rule" />
+
+        <!-- 4. The Opportunity -->
+        <div class="cost-section" style="margin-bottom:0;">
+          <div class="cost-section-head">
+            <span class="section-num" style="background:var(--ts-green);">4</span>
+            <h2 class="report-h2">The Opportunity: Improving Retention</h2>
+          </div>
+          <p class="report-body" style="padding-left:42px;">Reducing turnover doesn't just lower costs—it creates stability across your center.</p>
+        </div>
+
+        <div class="retention-box">
+          <h2>When teachers stay longer:</h2>
+          <ul class="retention-list">
+            <li>Classrooms remain consistent</li>
+            <li>Children experience stronger relationships</li>
+            <li>Staff workload becomes more manageable</li>
+          </ul>
+        </div>
+
+        <p class="report-body" style="font-size:12px; color:#9aabb5; font-style:italic; margin-top:4px;">
+          Teaching Strategies helps centers improve teacher retention—by up to 59%, as validated by independent research from NIEER.
+        </p>
+
+      </div><!-- /page-body -->
+
+      <div class="page-footer">
+        <p class="page-footer-note">Enrollment and disruption figures are conservative estimates. Hiring cost basis: SHRM ~24% of BLS median ECE wage (~$33,000).</p>
+        <span class="page-num">2 of 3</span>
+      </div>
+
+    </div><!-- /page-2 -->
+
+    <div class="page-break-label">— page break —</div>
+
+    <!-- ═══════════════════════════════
+         PAGE 3 — SAVINGS + CTA
+    ════════════════════════════════ -->
+    <div class="page" id="page-3">
+
+      <div class="report-header">
+        <img src="images/TS_Logo_K.png" alt="Teaching Strategies" />
+        <span class="report-header-label">Teacher Retention Cost Report</span>
+      </div>
+
+      <div class="page-body">
+
+        <!-- SAVINGS TABLE -->
+        <h2 class="report-h2" style="font-size:20px; margin-bottom:8px;">Your potential savings with improved retention</h2>
+        <p class="report-body" style="margin-bottom:18px;">
+          If your center improves retention in line with observed outcomes, you could reduce turnover-related costs significantly over time.
+        </p>
+
+        <table class="savings-table">
+          <thead>
+            <tr>
+              <th>Cost Category</th>
+              <th>Annual Savings</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Reduced hiring costs<br><span class="sub">Based on teachers retained × ~$8,000</span></td>
+              <td id="s-hiring">$—</td>
+            </tr>
+            <tr>
+              <td>Recovered enrollment revenue<br><span class="sub">Enrollment stability from reduced classroom disruption</span></td>
+              <td id="s-enrollment">$—</td>
+            </tr>
+            <tr>
+              <td>Reduced operational strain<br><span class="sub">Less substitute coverage and administrative overhead</span></td>
+              <td id="s-disruption">$—</td>
+            </tr>
+            <tr class="total">
+              <td>Estimated savings over 3 years</td>
+              <td id="s-total-3yr">$—</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="report-body" style="font-size:11.5px; color:#9aabb5; font-style:italic; margin-bottom:24px;">
+          These estimates are based on your inputs and industry benchmarks. Actual results will vary based on implementation and program context.
+        </p>
+
+        <hr class="report-rule" />
+
+        <!-- BEYOND COST SAVINGS -->
+        <h2 class="report-h2" style="font-size:20px; margin-bottom:8px;">Beyond cost savings: impact on children and classrooms</h2>
+        <p class="report-body" style="margin-bottom:14px;">
+          In addition to improving teacher retention, independent research from NIEER found that children in classrooms using Teaching Strategies demonstrated significantly greater growth across all developmental domains.
+        </p>
+
+        <div class="domains-grid">
+          <div class="domain-chip">Social-emotional development</div>
+          <div class="domain-chip">Language and literacy</div>
+          <div class="domain-chip">Cognitive and math skills</div>
+          <div class="domain-chip">Consistent teaching environments</div>
+        </div>
+
+        <p class="report-body" style="margin-top:12px; margin-bottom:20px;">
+          Consistent teaching staff and aligned instructional support contribute to stronger classroom environments and better developmental outcomes for children.
+        </p>
+
+        <hr class="report-rule" />
+
+        <!-- WHY RETENTION IMPROVES -->
+        <h2 class="report-h2" style="margin-bottom:14px;">Why retention improves</h2>
+        <p class="report-body" style="margin-bottom:14px;">Retention improvements are driven by a combination of:</p>
+
+        <ul class="drivers-list">
+          <li class="driver-item">
+            <div class="driver-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#007BC2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+              </svg>
+            </div>
+            <div>
+              <strong>Aligned curriculum and assessment tools</strong>
+              Clear, research-backed frameworks give teachers confidence and reduce the uncertainty that drives burnout.
+            </div>
+          </li>
+          <li class="driver-item">
+            <div class="driver-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#007BC2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+              </svg>
+            </div>
+            <div>
+              <strong>Ongoing, embedded professional learning</strong>
+              Continuous development keeps teachers engaged, growing, and connected to their work.
+            </div>
+          </li>
+          <li class="driver-item">
+            <div class="driver-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#007BC2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <div>
+              <strong>Coaching and support that reduces educator burnout</strong>
+              Structured coaching creates the support system teachers need to stay and thrive.
+            </div>
+          </li>
+        </ul>
+
+        <p class="report-body" style="margin-top:4px; margin-bottom:0;">
+          These elements work together to create a more supportive and sustainable teaching environment.
+        </p>
+
+        <hr class="report-rule" />
+
+        <!-- REFINE CTA -->
+        <div class="cta-box">
+          <h2 class="report-h2">Refine your estimate for your center</h2>
+          <p class="report-body" style="margin-bottom:14px;">
+            This report provides a directional estimate based on your inputs and industry benchmarks. To better understand how these savings apply to your center, we can refine this analysis using your actual staffing costs, structure, and enrollment model.
+          </p>
+          <p class="report-body" style="font-weight:700; color:var(--ts-navy); margin-bottom:10px;">Schedule a walkthrough to:</p>
+          <ul class="cta-checklist">
+            <li>Review your estimate in detail</li>
+            <li>Refine assumptions using your real data</li>
+            <li>Identify opportunities to improve retention and reduce costs</li>
+          </ul>
+          <!-- Link to be made functional when scheduling tool is integrated -->
+          <a href="#" class="cta-btn-report">Schedule a walkthrough →</a>
+        </div>
+
+      </div><!-- /page-body -->
+
+      <div class="page-footer">
+        <p class="page-footer-note">© Teaching Strategies, LLC. Based on independently validated improvements in teacher retention. NIEER research findings referenced with permission.</p>
+        <span class="page-num">3 of 3</span>
+      </div>
+
+    </div><!-- /page-3 -->
+
+  </div><!-- /doc-wrap -->
+
+  <!-- ══ CALCULATIONS ════════════════════════════════════════ -->
+  <script>
+    // ── Parse URL params (passed from landing.html via results.html)
+    // Expected: ?children=50&teachers=10&tuition=12000&turnover=30
+    const params = new URLSearchParams(window.location.search);
+
+    const childrenEnrolled = Math.max(1,   parseInt(params.get('children')) || 50);
+    const numTeachers      = Math.max(1,   parseInt(params.get('teachers')) || 10);
+    const annualTuition    = Math.max(0,   parseInt(params.get('tuition'))  || 12000);
+    const turnoverPct      = Math.min(100, Math.max(0, parseInt(params.get('turnover')) || 30));
+
+    // ── Core calculations — consistent with results.html and index.html
+    const REPLACEMENT_COST = 8000;
+    const DISRUPTION_RATE  = 1500;
+    const ENROLLMENT_CHURN = 0.05;
+
+    const attritionRate      = turnoverPct / 100;
+    const currentRetention   = 1 - attritionRate;
+    const projectedRetention = Math.min(0.99, currentRetention * 1.59);
+
+    const teachersLostNow    = Math.round(numTeachers * attritionRate);
+    const teachersLostProj   = Math.round(numTeachers * (1 - projectedRetention));
+    const teachersRetained   = Math.max(0, teachersLostNow - teachersLostProj);
+
+    // Annual costs (current)
+    const annualHiringCost    = teachersLostNow * REPLACEMENT_COST;
+    const childrenPerTeacher  = childrenEnrolled / numTeachers;
+    const childrenAtRisk      = Math.round(teachersLostNow * childrenPerTeacher * ENROLLMENT_CHURN);
+    const enrollmentRevAtRisk = childrenAtRisk * annualTuition;
+    const disruptionCost      = teachersLostNow * DISRUPTION_RATE;
+    const totalAnnualCost     = annualHiringCost + enrollmentRevAtRisk + disruptionCost;
+    const threeYearCost       = totalAnnualCost * 3;
+
+    // Annual savings (with TS)
+    const savingsHiring      = teachersRetained * REPLACEMENT_COST;
+    const childrenSaved      = Math.round(teachersRetained * childrenPerTeacher * ENROLLMENT_CHURN);
+    const savingsEnrollment  = childrenSaved * annualTuition;
+    const savingsDisruption  = teachersRetained * DISRUPTION_RATE;
+    const totalAnnualSavings = savingsHiring + savingsEnrollment + savingsDisruption;
+    const totalSavings3yr    = totalAnnualSavings * 3;
+
+    // ── Format helpers
+    const fmt  = n => '$' + Math.round(n).toLocaleString();
+
+    // ── Populate
+    document.getElementById('r-3year-headline').textContent  = fmt(threeYearCost);
+    document.getElementById('r-3year-glance').textContent    = fmt(threeYearCost);
+    document.getElementById('r-annual-glance').textContent   = fmt(totalAnnualCost);
+    document.getElementById('r-cost-hiring').textContent     = fmt(annualHiringCost);
+    document.getElementById('r-cost-enrollment').textContent = fmt(enrollmentRevAtRisk);
+    document.getElementById('r-cost-disruption').textContent = fmt(disruptionCost);
+    document.getElementById('s-hiring').textContent          = fmt(savingsHiring);
+    document.getElementById('s-enrollment').textContent      = fmt(savingsEnrollment);
+    document.getElementById('s-disruption').textContent      = fmt(savingsDisruption);
+    document.getElementById('s-total-3yr').textContent       = fmt(totalSavings3yr);
+  </script>
+
+</body>
+</html>
