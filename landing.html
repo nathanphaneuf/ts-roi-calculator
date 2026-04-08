@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teacher Turnover Cost Calculator — Teaching Strategies</title>
+  <style>
+    /* ══════════════════════════════════════
+       BRAND PALETTE — Teaching Strategies
+       Primary:  #007BC2  (blue)
+       Dark:     #00437C  (navy blue)
+       Sky:      #0099CC  (light blue)
+       Green:    #2BB673  (accent green)
+       Yellow:   #FFBC10  (accent yellow)
+       Orange:   #E34D20  (CTA)
+    ══════════════════════════════════════ */
+    :root {
+      --ts-blue:        #007BC2;
+      --ts-blue-dark:   #00437C;
+      --ts-blue-sky:    #0099CC;
+      --ts-blue-light:  #E6F4FB;
+      --ts-green:       #2BB673;
+      --ts-yellow:      #FFBC10;
+      --ts-orange:      #E34D20;
+      --ts-navy:        #0D1F2D;
+      --ts-slate:       #4A5F70;
+      --ts-white:       #ffffff;
+      --font: 'Gilmer', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: var(--ts-white);
+      color: var(--ts-navy);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ════════════════════════════════
+       HEADER
+    ════════════════════════════════ */
+    .site-header {
+      background: white;
+      padding: 18px 40px;
+      border-bottom: 1px solid #dde8f2;
+    }
+    .site-header img {
+      height: 36px;
+      width: auto;
+      display: block;
+    }
+
+    /* ════════════════════════════════
+       HERO
+    ════════════════════════════════ */
+    .hero {
+      background: linear-gradient(140deg, var(--ts-blue-dark) 0%, var(--ts-blue) 55%, var(--ts-blue-sky) 100%);
+      padding: 64px 40px 72px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 80% 10%, rgba(255,255,255,0.05) 0%, transparent 50%),
+        radial-gradient(circle at 5%  85%, rgba(0,153,204,0.12)   0%, transparent 45%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 60px;
+      align-items: center;
+      position: relative; z-index: 1;
+    }
+
+    .hero-headline {
+      font-size: clamp(28px, 3.6vw, 46px);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.3px;
+      color: white;
+      margin-bottom: 16px;
+    }
+
+    .hero-subhead {
+      font-size: clamp(15px, 1.8vw, 18px);
+      font-weight: 400;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.65;
+      margin-bottom: 36px;
+      max-width: 520px;
+    }
+
+    /* ── Form ── */
+    /* GRAVITY FORMS INTEGRATION:
+       When live on WordPress, replace the entire <form> block with:
+         [gravityform id="YOUR_FORM_ID" title="false" description="false"]
+       Map GF field IDs to: input_children_enrolled, input_num_teachers,
+       input_annual_tuition, input_turnover_rate.
+       The .lp-form CSS block below can be applied via GF custom CSS class. */
+    .lp-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 20px;
+      margin-bottom: 20px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field-group label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.88);
+      letter-spacing: 0.2px;
+    }
+
+    .field-group input {
+      height: 48px;
+      padding: 0 14px;
+      border: 1.5px solid rgba(255,255,255,0.28);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.10);
+      color: white;
+      font-family: var(--font);
+      font-size: 15px;
+      transition: border-color 0.18s, background 0.18s;
+      -moz-appearance: textfield;
+    }
+    .field-group input::-webkit-outer-spin-button,
+    .field-group input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .field-group input::placeholder { color: rgba(255,255,255,0.42); }
+    .field-group input:focus {
+      outline: none;
+      border-color: var(--ts-yellow);
+      background: rgba(255,255,255,0.16);
+    }
+
+    .submit-btn {
+      width: 100%;
+      height: 52px;
+      background: var(--ts-orange);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.1s, box-shadow 0.18s;
+      box-shadow: 0 4px 16px rgba(227,77,32,0.35);
+    }
+    .submit-btn:hover {
+      background: #c9441c;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(227,77,32,0.45);
+    }
+    .submit-btn:active { transform: translateY(0); }
+
+    .form-note {
+      font-size: 12.5px;
+      color: rgba(255,255,255,0.52);
+      margin-top: 12px;
+      text-align: center;
+      letter-spacing: 0.1px;
+    }
+
+    /* ── Hero image ── */
+    .hero-image img {
+      width: 100%;
+      height: 460px;
+      object-fit: cover;
+      border-radius: 14px;
+      box-shadow: 0 16px 56px rgba(0,0,0,0.30);
+      display: block;
+    }
+
+    /* ════════════════════════════════
+       NIEER SECTION
+    ════════════════════════════════ */
+    .nieer-section {
+      background: #f0f7fc;
+      padding: 72px 40px;
+    }
+
+    .nieer-inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .nieer-box {
+      background: var(--ts-blue-dark);
+      border-radius: 16px;
+      padding: 52px 52px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 52px;
+      align-items: center;
+    }
+
+    .nieer-quote {
+      font-size: clamp(18px, 2.2vw, 24px);
+      font-weight: 800;
+      color: white;
+      line-height: 1.45;
+    }
+
+    .nieer-quote .pct {
+      color: var(--ts-yellow);
+    }
+
+    .nieer-source {
+      margin-top: 18px;
+      font-size: 12.5px;
+      color: rgba(255,255,255,0.52);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    /* ── Retention chart ── */
+    .chart-card {
+      background: white;
+      border-radius: 12px;
+      padding: 28px 24px 22px;
+    }
+
+    .chart-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--ts-navy);
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .chart-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .bar-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--ts-navy);
+      width: 82px;
+      flex-shrink: 0;
+      text-align: right;
+      line-height: 1.3;
+    }
+
+    .bar-track {
+      flex: 1;
+      height: 38px;
+      background: #f0f0f0;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+    /* grid lines */
+    .bar-track::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(
+        to right,
+        transparent 0%,
+        transparent calc(25% - 0.5px),
+        rgba(0,0,0,0.08) calc(25% - 0.5px),
+        rgba(0,0,0,0.08) 25%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .bar-fill {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      border-radius: 0 4px 4px 0;
+      position: relative; z-index: 2;
+      transition: width 0.6s ease;
+    }
+    .bar-fill.control   { width: 51%; background: var(--ts-blue-dark); }
+    .bar-fill.treatment { width: 81%; background: var(--ts-blue); }
+
+    .bar-value {
+      font-size: 13px;
+      font-weight: 800;
+      color: white;
+    }
+
+    .chart-x-axis {
+      display: flex;
+      justify-content: space-between;
+      padding-left: 92px;
+      margin-top: 8px;
+      border-top: 1px solid #e0e0e0;
+      padding-top: 6px;
+    }
+    .x-tick {
+      font-size: 10.5px;
+      color: #888;
+    }
+
+    .chart-x-label {
+      text-align: center;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #444;
+      margin-top: 6px;
+      padding-left: 82px;
+    }
+
+    .chart-footnote {
+      margin-top: 14px;
+      font-size: 9.5px;
+      color: #888;
+      line-height: 1.55;
+      text-align: center;
+    }
+
+    /* ════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════ */
+    @media (max-width: 860px) {
+      .hero { padding: 48px 24px 56px; }
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      .hero-image { display: none; }
+      .field-grid { grid-template-columns: 1fr; }
+      .nieer-section { padding: 48px 24px; }
+      .nieer-box {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        padding: 36px 28px;
+      }
+      .site-header { padding: 16px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ HEADER ══════════════════════════════════════ -->
+  <!--
+    Logo file: place images/ts-logo.png in this directory.
+    On WordPress, this header may be replaced by the theme header.
+  -->
+  <header class="site-header">
+    <img src="images/ts-logo.png" alt="Teaching Strategies" />
+  </header>
+
+  <!-- ══ HERO ════════════════════════════════════════ -->
+  <section class="hero">
+    <div class="hero-inner">
+
+      <div class="hero-content">
+        <h1 class="hero-headline">Assess the cost of teacher turnover at your center.</h1>
+        <p class="hero-subhead">See how staff turnover may be impacting your finances—and what improving retention could mean for your center.</p>
+
+        <!--
+          ╔══════════════════════════════════════════════════════╗
+          ║  GRAVITY FORMS INTEGRATION                           ║
+          ║  Replace this entire <form>…</form> block with:      ║
+          ║    [gravityform id="X" title="false"                 ║
+          ║     description="false" ajax="true"]                 ║
+          ║                                                      ║
+          ║  Field mapping for GF setup:                        ║
+          ║    Field 1 → Number of children enrolled            ║
+          ║    Field 2 → Number of teachers                     ║
+          ║    Field 3 → Annual tuition                         ║
+          ║    Field 4 → Teacher turnover rate (%)              ║
+          ║                                                      ║
+          ║  Add CSS class "lp-form" to the GF form wrapper     ║
+          ╚══════════════════════════════════════════════════════╝
+        -->
+        <form class="lp-form" action="#" method="POST">
+
+          <div class="field-grid">
+            <div class="field-group">
+              <label for="children_enrolled">Number of children enrolled</label>
+              <input
+                type="number"
+                id="children_enrolled"
+                name="input_children_enrolled"
+                placeholder="e.g. 50"
+                min="1"
+              />
+            </div>
+
+            <div class="field-group">
+              <label for="num_teachers">Number of teachers</label>
+              <input
+                type="number"
+                id="num_teachers"
+                name="input_num_teachers"
+                placeholder="e.g. 10"
+                min="1"
+              />
+            </div>
+
+            <div class="field-group">
+              <label for="annual_tuition">Annual tuition</label>
+              <input
+                type="number"
+                id="annual_tuition"
+                name="input_annual_tuition"
+                placeholder="e.g. 12000"
+                min="0"
+              />
+            </div>
+
+            <div class="field-group">
+              <label for="turnover_rate">Teacher turnover rate (%)</label>
+              <input
+                type="number"
+                id="turnover_rate"
+                name="input_turnover_rate"
+                placeholder="e.g. 30"
+                min="0"
+                max="100"
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn">Submit</button>
+        </form>
+
+        <p class="form-note">Takes less than one minute. No commitment required.</p>
+      </div>
+
+      <div class="hero-image">
+        <img src="images/teacher-hero.png" alt="Teacher engaging with young students in a classroom" />
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ NIEER STAT BOX ══════════════════════════════ -->
+  <section class="nieer-section">
+    <div class="nieer-inner">
+      <div class="nieer-box">
+
+        <div>
+          <p class="nieer-quote">
+            Teaching Strategies has been shown to improve teacher retention by up to
+            <span class="pct">59%</span>,
+            validated by independent research from NIEER.
+          </p>
+          <p class="nieer-source">National Institute for Early Education Research (NIEER)</p>
+        </div>
+
+        <!-- Retention Data chart — recreated from NIEER study -->
+        <div class="chart-card">
+          <p class="chart-title">Retention Data</p>
+
+          <div class="chart-bars">
+            <div class="bar-row">
+              <span class="bar-label">Control</span>
+              <div class="bar-track">
+                <div class="bar-fill control">
+                  <span class="bar-value">51</span>
+                </div>
+              </div>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Treatment†</span>
+              <div class="bar-track">
+                <div class="bar-fill treatment">
+                  <span class="bar-value">81</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-x-axis">
+            <span class="x-tick">0</span>
+            <span class="x-tick">25</span>
+            <span class="x-tick">50</span>
+            <span class="x-tick">75</span>
+            <span class="x-tick">100</span>
+          </div>
+          <p class="chart-x-label">% of Teachers Retained</p>
+
+          <p class="chart-footnote">
+            †Treatment included The Creative Curriculum, GOLD®, Professional Development.<br />
+            *Difference between treatment (81%) and control (51%) = 30 percentage points,
+            equivalent to a 59% improvement.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
