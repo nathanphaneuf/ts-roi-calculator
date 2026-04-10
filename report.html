@@ -387,6 +387,12 @@
       font-size: 12px;
       color: var(--ts-slate);
     }
+    .savings-table td.formula {
+      font-size: 11.5px;
+      color: var(--ts-slate);
+      font-style: italic;
+      white-space: nowrap;
+    }
     .savings-table tr.total td {
       border-top: 2px solid var(--ts-blue-dark);
       border-bottom: none;
@@ -795,24 +801,34 @@
           <thead>
             <tr>
               <th>Cost Category</th>
+              <th>How it's calculated</th>
               <th>Annual Savings</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Reduced hiring costs<br><span class="sub">Based on teachers retained × ~$8,000</span></td>
+              <td>Reduced hiring costs<br><span class="sub">Fewer replacement hires at $8,000 per teacher</span></td>
+              <td class="formula" id="s-hiring-formula">— teachers retained × $8,000</td>
               <td id="s-hiring">$—</td>
             </tr>
             <tr>
-              <td>Recovered enrollment revenue<br><span class="sub">Enrollment stability from reduced classroom disruption</span></td>
+              <td>Recovered enrollment revenue<br><span class="sub">Fewer at-risk children × annual tuition</span></td>
+              <td class="formula" id="s-enrollment-formula">— children stabilized × $—/yr tuition</td>
               <td id="s-enrollment">$—</td>
             </tr>
             <tr>
-              <td>Reduced operational strain<br><span class="sub">Less substitute coverage and administrative overhead</span></td>
+              <td>Reduced operational strain<br><span class="sub">Less substitute coverage and admin overhead at $1,500/departure</span></td>
+              <td class="formula" id="s-disruption-formula">— teachers retained × $1,500</td>
               <td id="s-disruption">$—</td>
             </tr>
             <tr class="total">
+              <td>Estimated annual savings</td>
+              <td></td>
+              <td id="s-total-annual">$—</td>
+            </tr>
+            <tr class="total">
               <td>Estimated savings over 3 years</td>
+              <td class="formula">Annual savings × 3</td>
               <td id="s-total-3yr">$—</td>
             </tr>
           </tbody>
@@ -971,7 +987,16 @@
     document.getElementById('s-hiring').textContent          = fmt(savingsHiring);
     document.getElementById('s-enrollment').textContent      = fmt(savingsEnrollment);
     document.getElementById('s-disruption').textContent      = fmt(savingsDisruption);
+    document.getElementById('s-total-annual').textContent    = fmt(totalAnnualSavings);
     document.getElementById('s-total-3yr').textContent       = fmt(totalSavings3yr);
+
+    // Formula column — show actual computed values
+    document.getElementById('s-hiring-formula').textContent =
+      teachersRetained + ' teachers retained × $8,000';
+    document.getElementById('s-enrollment-formula').textContent =
+      childrenSaved + ' children stabilized × $' + annualTuition.toLocaleString() + '/yr tuition';
+    document.getElementById('s-disruption-formula').textContent =
+      teachersRetained + ' teachers retained × $1,500';
   </script>
 
 </body>
