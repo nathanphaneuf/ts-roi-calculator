@@ -51,7 +51,7 @@
     ════════════════════════════════ */
     .results-hero {
       background: linear-gradient(140deg, var(--ts-blue-dark) 0%, var(--ts-blue) 55%, var(--ts-blue-sky) 100%);
-      padding: 64px 40px 72px;
+      padding: 40px 40px 48px;
       position: relative;
       overflow: hidden;
     }
@@ -117,7 +117,7 @@
     .results-basis {
       font-size: 16px;
       color: rgba(255,255,255,0.82);
-      margin-bottom: 28px;
+      margin-bottom: 16px;
       line-height: 1.65;
     }
 
@@ -140,7 +140,7 @@
       color: rgba(255,255,255,0.88);
       line-height: 1.72;
       max-width: 660px;
-      margin-bottom: 44px;
+      margin-bottom: 24px;
     }
     .retention-message strong { color: white; }
 
@@ -181,7 +181,7 @@
     ════════════════════════════════ */
     .cost-breakdown {
       background: #f4f9fd;
-      padding: 72px 40px;
+      padding: 48px 40px;
     }
 
     .section-inner {
@@ -274,7 +274,7 @@
     ════════════════════════════════ */
     .cta-primary {
       background: linear-gradient(140deg, var(--ts-blue-dark) 0%, var(--ts-blue) 60%, var(--ts-blue-sky) 100%);
-      padding: 80px 40px;
+      padding: 52px 40px;
     }
 
     .cta-inner {
@@ -287,7 +287,7 @@
       font-weight: 900;
       color: white;
       text-align: center;
-      margin-bottom: 56px;
+      margin-bottom: 32px;
       line-height: 1.3;
       max-width: 680px;
       margin-left: auto;
@@ -443,18 +443,32 @@
     }
 
     .beyond-inner {
-      max-width: 760px;
+      max-width: 960px;
       margin: 0 auto;
-      text-align: center;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: center;
     }
 
-    .beyond-inner .section-eyebrow {
+    .beyond-image {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,67,124,0.10);
+    }
+
+    .beyond-image img {
+      width: 100%;
       display: block;
-      text-align: center;
+      object-fit: cover;
+    }
+
+    .beyond-text .section-eyebrow {
+      display: block;
       margin-bottom: 12px;
     }
 
-    .beyond-inner h2 {
+    .beyond-text h2 {
       font-size: clamp(22px, 2.6vw, 30px);
       font-weight: 900;
       color: var(--ts-navy);
@@ -462,7 +476,7 @@
       line-height: 1.2;
     }
 
-    .beyond-inner p {
+    .beyond-text p {
       font-size: 16px;
       color: var(--ts-slate);
       line-height: 1.78;
@@ -474,6 +488,13 @@
       color: #aab4bc !important;
       font-style: italic;
       margin-bottom: 0 !important;
+    }
+
+    @media (max-width: 860px) {
+      .beyond-inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
     }
 
     /* ════════════════════════════════
@@ -707,9 +728,6 @@
               alt="Full savings report preview"
               onerror="document.getElementById('report-preview-wrap').innerHTML='<p class=\'report-preview-placeholder\'>Full report preview coming soon</p>';"
             />
-            <div class="report-preview-overlay">
-              <span class="report-preview-badge">View Full Report</span>
-            </div>
           </div>
         </div>
 
@@ -798,10 +816,15 @@
   <!-- ══ BEYOND COST SAVINGS ════════════════════════════════ -->
   <section class="beyond-section">
     <div class="beyond-inner">
-      <span class="section-eyebrow">Beyond cost savings</span>
-      <h2>Children thrive when teachers stay</h2>
-      <p>In addition to improving retention, independent research from NIEER found that children in classrooms using Teaching Strategies demonstrated significantly greater growth across all developmental domains, including language, literacy, math, and social-emotional development.</p>
-      <p class="beyond-source">National Institute for Early Education Research (NIEER)</p>
+      <div class="beyond-image">
+        <img src="images/GettyImages-1092434156.jpg" alt="Children learning in a classroom" />
+      </div>
+      <div class="beyond-text">
+        <span class="section-eyebrow">Beyond cost savings</span>
+        <h2>Children thrive when teachers stay</h2>
+        <p>In addition to improving retention, independent research from NIEER found that children in classrooms using Teaching Strategies demonstrated significantly greater growth across all developmental domains, including language, literacy, math, and social-emotional development.</p>
+        <p class="beyond-source">National Institute for Early Education Research (NIEER)</p>
+      </div>
     </div>
   </section>
 
@@ -811,7 +834,7 @@
 
       <div class="specialist-intro">
         <h2>Review your results with a specialist</h2>
-        <p>Connect with a Teaching Strategies expert to walk through your numbers and explore what improved retention could look like at your center.</p>
+        <p>Connect with a Teaching Strategies expert to refine your estimate using your center's actual staffing costs, attrition rates, and enrollment model—and see what improved retention could look like for your program.</p>
       </div>
 
       <!--
@@ -895,7 +918,7 @@
             </div>
           </div>
 
-          <button type="submit" class="gate-btn" style="margin-top:8px;">Review your results with a specialist →</button>
+          <button type="submit" class="gate-btn" style="margin-top:8px;">Request a walkthrough →</button>
 
         </form>
       </div>
